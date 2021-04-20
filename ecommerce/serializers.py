@@ -14,7 +14,6 @@ class UserSerializer(serializers.ModelSerializer):
         }
 
     def save(self):
-        print('hello world')
         user = User(
             email = self.validated_data['email'],
             username = self.validated_data['username'],
