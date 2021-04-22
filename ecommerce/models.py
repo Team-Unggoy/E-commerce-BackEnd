@@ -8,7 +8,11 @@ from django.contrib.auth.models import User
 
 class MyAccountManager(BaseUserManager):
     
-    def create_user(self, email, username, password=None):
+    def create_user(self, email, first_name, last_name, username, password=None):
+        if not first_name:
+            raise ValueError('User must have a first name')
+        if not last_name:
+            raise ValueError('User must have a last name')
         if not email:
             raise ValueError('User must have an email address')
         if not username:
@@ -17,6 +21,8 @@ class MyAccountManager(BaseUserManager):
         user = self.model(
             email=self.normalize_email(email),
             username = username,
+            first_name = first_name,
+            last_name = last_name
         )
 
         user.set_password(password)
@@ -49,8 +55,11 @@ class Account(AbstractBaseUser):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
-
     # required fields for making custome user model
+
+    first_name = models.CharField(verbose_name='first name', max_length=100, default=None)
+    last_name = models.CharField(verbose_name='last name', max_length=100, default=None)
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 

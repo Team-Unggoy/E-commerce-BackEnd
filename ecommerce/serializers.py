@@ -11,7 +11,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Account
-        fields = ['username', 'email', 'password', 'password_compare']
+        fields = ['username', 'email', 'first_name', 'last_name', 'password', 'password_compare']
         extra_kwargs = {
             'password': {'write_only':True}
         }
@@ -20,6 +20,8 @@ class UserSerializer(serializers.ModelSerializer):
         user = Account(
             email = self.validated_data['email'],
             username = self.validated_data['username'],
+            first_name = self.validated_data['first_name'],
+            last_name = self.validated_data['last_name'],
         )
 
         password = self.validated_data['password']

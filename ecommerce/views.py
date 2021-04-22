@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .models import Account
+from rest_framework.authtoken.views import ObtainAuthToken
 from django.contrib.auth.models import User
 from ecommerce.serializers import UserSerializer
 from rest_framework.response import Response
@@ -19,7 +20,6 @@ def UserList(request):
 @api_view(['GET'])
 def UserDetail(request, pk):
     obj = Account.objects.get(id=pk)
-    print('ga dagan kaha ko diri')
     serializer = UserSerializer(obj)
     return Response(serializer.data)
 
@@ -31,6 +31,8 @@ def UserCreate(request):
         account = serializer.save()
         data['response'] = 'Successfully registered a new user.'
         data['email'] = account.email
+        data['first_name'] = account.first_name
+        data['last_name'] = account.last_name
         data['username'] = account.username
         token = Token.objects.get(user=account).key
         data['token'] = token
